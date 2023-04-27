@@ -1,0 +1,243 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="COFFIModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="COFFI" annotation:LazyLoadingEnabled="true">
+    <FunctionImport Name="sp_alterdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_creatediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_dropdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(COFFIModel.sp_helpdiagramdefinition_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(COFFIModel.sp_helpdiagrams_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_renamediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="new_diagramname" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_upgraddiagrams" />
+    <EntitySet Name="Check" EntityType="COFFIModel.Check" />
+    <EntitySet Name="Cofe" EntityType="COFFIModel.Cofe" />
+    <EntitySet Name="Composition" EntityType="COFFIModel.Composition" />
+    <EntitySet Name="Gender" EntityType="COFFIModel.Gender" />
+    <EntitySet Name="Product" EntityType="COFFIModel.Product" />
+    <EntitySet Name="ProductCheck" EntityType="COFFIModel.ProductCheck" />
+    <EntitySet Name="sysdiagrams" EntityType="COFFIModel.sysdiagrams" />
+    <EntitySet Name="TypeOfProduct" EntityType="COFFIModel.TypeOfProduct" />
+    <EntitySet Name="User" EntityType="COFFIModel.User" />
+    <EntitySet Name="UserType" EntityType="COFFIModel.UserType" />
+    <AssociationSet Name="FK_Check_Cofe" Association="COFFIModel.FK_Check_Cofe">
+      <End Role="Cofe" EntitySet="Cofe" />
+      <End Role="Check" EntitySet="Check" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Check_User" Association="COFFIModel.FK_Check_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="Check" EntitySet="Check" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductCheck_Check" Association="COFFIModel.FK_ProductCheck_Check">
+      <End Role="Check" EntitySet="Check" />
+      <End Role="ProductCheck" EntitySet="ProductCheck" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Product_TypeOfProduct" Association="COFFIModel.FK_Product_TypeOfProduct">
+      <End Role="TypeOfProduct" EntitySet="TypeOfProduct" />
+      <End Role="Product" EntitySet="Product" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductCheck_Product" Association="COFFIModel.FK_ProductCheck_Product">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="ProductCheck" EntitySet="ProductCheck" />
+    </AssociationSet>
+  </EntityContainer>
+  <ComplexType Name="sp_helpdiagramdefinition_Result">
+    <Property Type="Int32" Name="version" Nullable="true" />
+    <Property Type="Binary" Name="definition" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_helpdiagrams_Result">
+    <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+    <Property Type="Int32" Name="OwnerID" Nullable="false" />
+  </ComplexType>
+  <EntityType Name="Check">
+    <Key>
+      <PropertyRef Name="IDCheck" />
+    </Key>
+    <Property Name="IDCheck" Type="Int32" Nullable="false" />
+    <Property Name="IDCofe" Type="Int32" />
+    <Property Name="IssuingTime" Type="DateTime" Precision="3" />
+    <Property Name="IDUser" Type="Int32" />
+    <NavigationProperty Name="Cofe" Relationship="COFFIModel.FK_Check_Cofe" FromRole="Check" ToRole="Cofe" />
+    <NavigationProperty Name="User" Relationship="COFFIModel.FK_Check_User" FromRole="Check" ToRole="User" />
+    <NavigationProperty Name="ProductCheck" Relationship="COFFIModel.FK_ProductCheck_Check" FromRole="Check" ToRole="ProductCheck" />
+  </EntityType>
+  <EntityType Name="Cofe">
+    <Key>
+      <PropertyRef Name="IDCofe" />
+    </Key>
+    <Property Name="IDCofe" Type="Int32" Nullable="false" />
+    <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DirectorName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Check" Relationship="COFFIModel.FK_Check_Cofe" FromRole="Cofe" ToRole="Check" />
+  </EntityType>
+  <EntityType Name="Composition">
+    <Key>
+      <PropertyRef Name="IDComposition" />
+    </Key>
+    <Property Name="IDComposition" Type="Int32" Nullable="false" />
+    <Property Name="NameOfIngredient" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="WeightInGrams" Type="Int32" />
+    <Property Name="Сalories" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Gender">
+    <Key>
+      <PropertyRef Name="IDGender" />
+    </Key>
+    <Property Name="IDGender" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="true" />
+    <Property Name="NameOfGender" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="IDProduct" />
+    </Key>
+    <Property Name="IDProduct" Type="Int32" Nullable="false" />
+    <Property Name="NameOfProduct" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Quantity" Type="Int32" />
+    <Property Name="Cost" Type="Int32" />
+    <Property Name="Sale" Type="Double" />
+    <Property Name="IDTypeOfProduct" Type="Int32" />
+    <Property Name="Imagen" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="TypeOfProduct" Relationship="COFFIModel.FK_Product_TypeOfProduct" FromRole="Product" ToRole="TypeOfProduct" />
+    <NavigationProperty Name="ProductCheck" Relationship="COFFIModel.FK_ProductCheck_Product" FromRole="Product" ToRole="ProductCheck" />
+  </EntityType>
+  <EntityType Name="ProductCheck">
+    <Key>
+      <PropertyRef Name="IDProductCheck" />
+    </Key>
+    <Property Name="IDProduct" Type="Int32" Nullable="false" />
+    <Property Name="IDCheck" Type="Int32" Nullable="false" />
+    <Property Name="CountOfProduct" Type="Int32" />
+    <Property Name="IDProductCheck" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <NavigationProperty Name="Check" Relationship="COFFIModel.FK_ProductCheck_Check" FromRole="ProductCheck" ToRole="Check" />
+    <NavigationProperty Name="Product" Relationship="COFFIModel.FK_ProductCheck_Product" FromRole="ProductCheck" ToRole="Product" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="TypeOfProduct">
+    <Key>
+      <PropertyRef Name="IDTypeOfProduct" />
+    </Key>
+    <Property Name="IDTypeOfProduct" Type="Int32" Nullable="false" />
+    <Property Name="NameTypeOfProduct" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Product" Relationship="COFFIModel.FK_Product_TypeOfProduct" FromRole="TypeOfProduct" ToRole="Product" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="IDUser" />
+    </Key>
+    <Property Name="IDUser" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DateOfBirth" Type="DateTime" Precision="0" />
+    <Property Name="Password" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+    <Property Name="Login" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="IDGender" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="IDUserType" Type="Int32" />
+    <Property Name="Patronimic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Check" Relationship="COFFIModel.FK_Check_User" FromRole="User" ToRole="Check" />
+  </EntityType>
+  <EntityType Name="UserType">
+    <Key>
+      <PropertyRef Name="IDType" />
+    </Key>
+    <Property Name="IDType" Type="Int32" Nullable="false" />
+    <Property Name="NameTypeOfUser" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="RightsOfUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <Association Name="FK_Check_Cofe">
+    <End Type="COFFIModel.Cofe" Role="Cofe" Multiplicity="0..1" />
+    <End Type="COFFIModel.Check" Role="Check" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cofe">
+        <PropertyRef Name="IDCofe" />
+      </Principal>
+      <Dependent Role="Check">
+        <PropertyRef Name="IDCofe" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Check_User">
+    <End Type="COFFIModel.User" Role="User" Multiplicity="1" />
+    <End Type="COFFIModel.Check" Role="Check" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="IDUser" />
+      </Principal>
+      <Dependent Role="Check">
+        <PropertyRef Name="IDCheck" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductCheck_Check">
+    <End Type="COFFIModel.Check" Role="Check" Multiplicity="1" />
+    <End Type="COFFIModel.ProductCheck" Role="ProductCheck" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Check">
+        <PropertyRef Name="IDCheck" />
+      </Principal>
+      <Dependent Role="ProductCheck">
+        <PropertyRef Name="IDCheck" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Product_TypeOfProduct">
+    <End Type="COFFIModel.TypeOfProduct" Role="TypeOfProduct" Multiplicity="0..1" />
+    <End Type="COFFIModel.Product" Role="Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TypeOfProduct">
+        <PropertyRef Name="IDTypeOfProduct" />
+      </Principal>
+      <Dependent Role="Product">
+        <PropertyRef Name="IDTypeOfProduct" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductCheck_Product">
+    <End Type="COFFIModel.Product" Role="Product" Multiplicity="1" />
+    <End Type="COFFIModel.ProductCheck" Role="ProductCheck" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="IDProduct" />
+      </Principal>
+      <Dependent Role="ProductCheck">
+        <PropertyRef Name="IDProduct" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
